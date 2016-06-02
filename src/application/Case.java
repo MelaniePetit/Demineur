@@ -1,5 +1,11 @@
 package application;
 
+
+import java.util.ArrayList;
+import java.util.HashMap;
+
+import Commun.Commun;
+import Commun.Commun.Direction;
 import javafx.event.EventHandler;
 import javafx.scene.Parent;
 import javafx.scene.input.MouseEvent;
@@ -10,18 +16,28 @@ import javafx.scene.text.Text;
 
 public class Case extends Parent{
 	
-	 public String lettre;	//lettre de la touche, c'est une variable public pour qu'elle puisse être lue depuis les autres classes
-	 private int positionX;	//abscisse
-	 private int positionY;	//ordonnée de la touche
-	 private boolean bombe;	//case est porteuse de bombe
-	  
-	 Rectangle fond_touche;
-	 Text lettre_touche;
+
+	public String lettre;	//lettre de la touche, c'est une variable public pour qu'elle puisse être lue depuis les autres classes
+	private int i;	//abscisse
+	private int j;	//ordonnée de la touche
+	private int index;
+	private boolean bombe;	//case est porteuse de bombe
+	private HashMap<Case, Commun.Direction> voisins;
+	
+	public ArrayList<Case> listeVoisins;
+
+	
+	Rectangle fond_touche;
+	Text lettre_touche;
 	    
-	public Case(int posX, int posY){
+	public Case(int i, int j){
 		lettre =  "0";
-	    positionX = posX;
-	    positionY = posY;
+		this.i = i;
+		this.j = j;
+	    //this.index=index;
+		this.voisins = new HashMap<Case, Commun.Direction>();
+		listeVoisins = new ArrayList<Case>();
+		
 	    int a = (int)Math.random();
 	    
 	    if ((int)a == 1){
@@ -37,12 +53,9 @@ public class Case extends Parent{
 	    lettre_touche = new Text(lettre);
 	    lettre_touche.setFont(new Font(25));
 	    lettre_touche.setFill(Color.BLACK);
-	    lettre_touche.setX(25);
+	    lettre_touche.setX(30);
 	    lettre_touche.setY(45);
 	    this.getChildren().add(lettre_touche);//ajout de la lettre de la touche
-	        
-	    this.setTranslateX(positionX);//positionnement de la touche sur le clavier
-	    this.setTranslateY(positionY);
 	    
 	    this.setOnMousePressed(new EventHandler<MouseEvent>(){
 	    	public void handle(MouseEvent me){
@@ -55,17 +68,77 @@ public class Case extends Parent{
 	    	}
 	    });
     }
-
+	
+	public Boolean getBombe(){
+		return bombe;
+	}
+	
+	public void setBombe(Boolean bombe){
+		this.bombe=bombe;
+	}
 	public void appuyer(){
 		fond_touche.setFill(Color.DARKGREY);
-        this.setTranslateY(positionY+2);
 	}
 	
     public void relacher(){
         fond_touche.setFill(Color.WHITE);
-        this.setTranslateY(positionY);
-        lettre_touche.setText("1");
+        if (getBombe()){
+            lettre_touche.setText("B");
+
+        }
+        else {
+        	lettre_touche.setText("0");
+        }
     }
+    
+	 public int getI() {
+		return i;
+	}
+
+	public void setI(int i) {
+		this.i = i;
+	}
+
+	public int getJ() {
+		return j;
+	}
+
+	public void setJ(int j) {
+		this.j = j;
+	}
+	
+	public int getIndexArrayList(int nbColonne) {
+		return this.i*nbColonne+this.j;
+	}
+	
+    /*public void mesVoisins(int nbColonne){
+
+		if(this.j > 0) {
+			// Ajoute a la case courante, la case qui la precede, dans ses voisins.
+			this.voisins.put(listeVoisins.get(this.getIndexArrayList(nbColonne)-1), Commun.Direction.getDirection(0, -1));
+			// Sachant qu'a la creation de la case precedente, la case courante n'existait pas, on l'ajoute maintenant aux voisins de la case precedente.
+			listeVoisins.get(this.getIndexArrayList(nbColonne)-1).voisins.put(this, Commun.Direction.getDirection(0, 1));
+			
+			if(this.i > 0) {
+				//Case en diagonale haut-gauche
+				this.voisins.put(listeVoisins.get(this.getIndexArrayList(nbColonne)-1-nbColonne), Commun.Direction.getDirection(-1, -1));
+				listeVoisins.get(this.getIndexArrayList(nbColonne)-1-nbColonne).voisins.put(this,Commun.Direction.getDirection(1, 1));
+			}
+		}
+		
+		if(this.i > 0) {
+			//Case au dessus
+			this.voisins.put(listeVoisins.get(this.getIndexArrayList(nbColonne)-nbColonne), Commun.Direction.getDirection(-1, 0));
+			listeVoisins.get(this.getIndexArrayList(nbColonne)-nbColonne).voisins.put(this, Commun.Direction.getDirection(1, 0));
+		}
+		
+		if(this.j < nbColonne-1 && this.i > 0) {
+			//Case en diagonale-droite
+			this.voisins.put(listeVoisins.get(this.getIndexArrayList(nbColonne)+1-nbColonne), Commun.Direction.getDirection(-1, 1));
+			listeVoisins.get(this.getIndexArrayList(nbColonne)+1-nbColonne).voisins.put(this, Commun.Direction.getDirection(1, -1));
+		}
+	}*/
+	
 }
 
 
