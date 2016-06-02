@@ -17,26 +17,32 @@ import javafx.scene.text.Text;
 public class Case extends Parent{
 	
 
-	public String lettre;	//lettre de la touche, c'est une variable public pour qu'elle puisse être lue depuis les autres classes
+	public String lettre;	//lettre de la touche, c'est une variable public pour qu'elle puisse etre lue depuis les autres classes
 	private int i;	//abscisse
-	private int j;	//ordonnée de la touche
+	private int j;	//ordonnee de la touche
 	private int index;
 	private boolean bombe;	//case est porteuse de bombe
 	private HashMap<Case, Commun.Direction> voisins;
 	
-	public ArrayList<Case> listeVoisins;
+	//public ArrayList<Case> listeVoisins;
 
 	
 	Rectangle fond_touche;
 	Text lettre_touche;
-	    
+	
+	//Constructeur d'une case Ã  partir de son index
+	public Case(int index){
+		
+	}
+	
+	//Constructeur d'une case Ã  partir de son i et de son j
 	public Case(int i, int j){
 		lettre =  "0";
 		this.i = i;
 		this.j = j;
 	    //this.index=index;
 		this.voisins = new HashMap<Case, Commun.Direction>();
-		listeVoisins = new ArrayList<Case>();
+		//listeVoisins = new ArrayList<Case>();
 		
 	    int a = (int)Math.random();
 	    
@@ -89,6 +95,8 @@ public class Case extends Parent{
         else {
         	lettre_touche.setText("0");
         }
+    	System.out.println(this.voisins);
+
     }
     
 	 public int getI() {
@@ -111,33 +119,17 @@ public class Case extends Parent{
 		return this.i*nbColonne+this.j;
 	}
 	
-    /*public void mesVoisins(int nbColonne){
-
-		if(this.j > 0) {
-			// Ajoute a la case courante, la case qui la precede, dans ses voisins.
-			this.voisins.put(listeVoisins.get(this.getIndexArrayList(nbColonne)-1), Commun.Direction.getDirection(0, -1));
-			// Sachant qu'a la creation de la case precedente, la case courante n'existait pas, on l'ajoute maintenant aux voisins de la case precedente.
-			listeVoisins.get(this.getIndexArrayList(nbColonne)-1).voisins.put(this, Commun.Direction.getDirection(0, 1));
-			
-			if(this.i > 0) {
-				//Case en diagonale haut-gauche
-				this.voisins.put(listeVoisins.get(this.getIndexArrayList(nbColonne)-1-nbColonne), Commun.Direction.getDirection(-1, -1));
-				listeVoisins.get(this.getIndexArrayList(nbColonne)-1-nbColonne).voisins.put(this,Commun.Direction.getDirection(1, 1));
-			}
-		}
-		
-		if(this.i > 0) {
-			//Case au dessus
-			this.voisins.put(listeVoisins.get(this.getIndexArrayList(nbColonne)-nbColonne), Commun.Direction.getDirection(-1, 0));
-			listeVoisins.get(this.getIndexArrayList(nbColonne)-nbColonne).voisins.put(this, Commun.Direction.getDirection(1, 0));
-		}
-		
-		if(this.j < nbColonne-1 && this.i > 0) {
-			//Case en diagonale-droite
-			this.voisins.put(listeVoisins.get(this.getIndexArrayList(nbColonne)+1-nbColonne), Commun.Direction.getDirection(-1, 1));
-			listeVoisins.get(this.getIndexArrayList(nbColonne)+1-nbColonne).voisins.put(this, Commun.Direction.getDirection(1, -1));
-		}
-	}*/
+	public HashMap<Case, Commun.Direction> getVoisins(){
+		return voisins;
+	}
+	
+	public void ajouterAuxVoisins(Case c,Direction direction){
+		voisins.put(c,direction);
+	}
+	
+	public String toString(){
+		return "["+this.getI()+" ; "+this.getJ()+"] ";
+	}
 	
 }
 
